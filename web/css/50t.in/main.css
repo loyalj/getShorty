@@ -1,0 +1,39 @@
+body{
+    background-color: rgb(120, 120, 120);
+    font-family: arial, helvetica, sans-serif;
+    color: rgb(255, 255, 255);
+    background-image: url('/img/50t.in/tinroof.jpg');
+
+}
+
+h1 {
+    margin-bottom: 3px;
+}
+
+h6 {
+    margin-top: 0px;
+}
+
+a {
+    color: rgb(255,255, 0);
+    font-weight: bold;
+}
+
+a:hover {
+    color: rgb(0, 255, 255);
+}
+
+#divMain{
+    width: 640px;
+    border: 4px solid rgb(100, 100, 100);
+    margin: 0 auto 0 auto;
+    padding: 0 0 5px 0;
+
+    background-color: rgb(120, 120, 120);
+    text-align: center;
+}
+
+#longURL{
+    width: 600px;
+    margin: 5px;
+}

@@ -50,6 +50,7 @@
             Flight::view()->set('longURL', $URLData['longURL']);
             Flight::view()->set('shortURL', $URLData['shortURL']);
             Flight::view()->set('created', $URLData['created']);
+            Flight::view()->set('hash', $hash);
 
             Flight::render('shortened', array(), 'bodyContent'); 
             Flight::render('layout');		
@@ -70,12 +71,34 @@
         }
     });
 
-
     session_start();
-    //Initiate, configure,  and run the microframework.
-    Flight::set('flight.views.path', '../views');
+
+    //Grab some server infos    
+    $baseHost = $_SERVER['HTTP_HOST'];
+    $baseURL = 'http://' . $baseHost . '/';
     
-    Flight::register('shortener', 'avdShortener', array('http://dblpl.us/'));
-    Flight::view()->set('pageTitle', '++Good: ++Fast, ++Easy');
-    Flight::view()->set('headerContent', 'Double Plus Good');
+    //Initiate, configure,  and run the microframework.
+    $viewPath = '../views/' . $baseHost;
+    if(!is_dir($viewPath)) {
+        $viewPath = '../views/default';
+    }
+
+    $configPath = '../config/' . $baseHost;
+    if(!is_dir($configPath)) {
+        $configPath = '../config';
+    }
+    $configPath .= '/config.php';
+
+    require_once($configPath);
+
+    Flight::set('flight.views.path', $viewPath);
+    
+    Flight::register('shortener', 'avdShortener', array($baseURL));
+    
+    Flight::view()->set('baseHost', $baseHost);
+    Flight::view()->set('baseURL', $baseURL);
+    Flight::view()->set('pageTitle', $config['pageTitle']);
+    Flight::view()->set('headerContent', $config['headerContent']);
+    Flight::view()->set('bylineContent', $config['bylineContent']);
+    
     Flight::start();
