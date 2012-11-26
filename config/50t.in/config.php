@@ -1,8 +1,8 @@
 <?php 
 
 $config = array(
-    'pageTitle' => 'Pushing Tin',
-    'headerContent' => 'Pushing Tin',
+    'pageTitle' => 'URL Cannery',
+    'headerContent' => 'URL Cannery',
     'bylineContent' => 'Put yer links in the tin can!',
 );
 

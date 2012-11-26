@@ -17,14 +17,22 @@
         
 	if(isset($_POST['longURL'])) {
             $longURL = $_POST['longURL'];
-            
+            $apiOn = (isset($_POST['api']) && $_POST['api'] == '1') ? true : false;
+
             $isURL = filter_var($longURL, FILTER_VALIDATE_URL);
             if(!$isURL) {
-               $_SESSION['flashError'] = true;
-               $_SESSION['flashMessage'] = 'Not a valid URL';
-               $_SESSION['lastInput'] = $longURL;
-               Flight::redirect('/');
-               exit;
+                if($apiOn) {
+                    Flight::view()->set('errorType', 'Invalid URL');
+                    Flight::render('api-error');
+                    exit;
+                }
+                else {
+                    $_SESSION['flashError'] = true;
+                    $_SESSION['flashMessage'] = 'Not a valid URL';
+                    $_SESSION['lastInput'] = $longURL;
+                    Flight::redirect('/');
+                    exit;
+                }
             }
             
             $shortener = Flight::shortener();
@@ -36,8 +44,18 @@
             else {
                 $URLData = $shortener->loadURLData($URLData['hash']);
             }
-            
-            Flight::redirect('/s/' . $URLData['hash']); 
+           
+            if($apiOn) {
+                Flight::view()->set('longURL', $URLData['longURL']);
+                Flight::view()->set('shortURL', $URLData['shortURL']);
+                Flight::view()->set('created', $URLData['created']);
+                Flight::view()->set('hash', $URLData['hash']);
+
+                Flight::render('api'); 
+            }
+            else {
+                Flight::redirect('/s/' . $URLData['hash']); 
+            }
         }     
     });
 
