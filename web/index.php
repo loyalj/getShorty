@@ -15,11 +15,12 @@
    
     Flight::route('POST /', function (){
         
-	if(isset($_POST['longURL'])) {
+        if(isset($_POST['longURL'])) {
+            
             $longURL = $_POST['longURL'];
-            $apiOn = (isset($_POST['api']) && $_POST['api'] == '1') ? true : false;
-
+            $apiOn = $_POST['api'] == 1;
             $isURL = filter_var($longURL, FILTER_VALIDATE_URL);
+                
             if(!$isURL) {
                 if($apiOn) {
                     Flight::view()->set('errorType', 'Invalid URL');
@@ -38,24 +39,20 @@
             $shortener = Flight::shortener();
             $URLData = $shortener->generateURLData($longURL);
             
-            if($shortener->isAlreadyHashed($URLData['hash']) == false) {
+            if(!$shortener->isAlreadyHashed($URLData['hash'])) {
                 $shortener->saveURLData($URLData);
             }
-            else {
-                $URLData = $shortener->loadURLData($URLData['hash']);
-            }
-           
-            if($apiOn) {
-                Flight::view()->set('longURL', $URLData['longURL']);
-                Flight::view()->set('shortURL', $URLData['shortURL']);
-                Flight::view()->set('created', $URLData['created']);
-                Flight::view()->set('hash', $URLData['hash']);
 
-                Flight::render('api'); 
-            }
-            else {
+            if(!$apiOn){
                 Flight::redirect('/s/' . $URLData['hash']); 
+                exit;
             }
+                            
+            Flight::view()->set('longURL', $URLData['longURL']);
+            Flight::view()->set('shortURL', $URLData['shortURL']);
+            Flight::view()->set('created', $URLData['created']);
+            Flight::view()->set('hash', $URLData['hash']);
+            Flight::render('api'); 
         }     
     });
 
