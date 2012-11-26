@@ -19,21 +19,19 @@
             
             $longURL = $_POST['longURL'];
             $apiOn = $_POST['api'] == 1;
-            $isURL = filter_var($longURL, FILTER_VALIDATE_URL);
                 
-            if(!$isURL) {
+            if(!filter_var($longURL, FILTER_VALIDATE_URL)) {
                 if($apiOn) {
                     Flight::view()->set('errorType', 'Invalid URL');
                     Flight::render('api-error');
                     exit;
                 }
-                else {
-                    $_SESSION['flashError'] = true;
-                    $_SESSION['flashMessage'] = 'Not a valid URL';
-                    $_SESSION['lastInput'] = $longURL;
-                    Flight::redirect('/');
-                    exit;
-                }
+
+                $_SESSION['flashError'] = true;
+                $_SESSION['flashMessage'] = 'Not a valid URL';
+                $_SESSION['lastInput'] = $longURL;
+                Flight::redirect('/');
+                exit;
             }
             
             $shortener = Flight::shortener();
