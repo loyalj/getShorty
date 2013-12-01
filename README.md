@@ -2,7 +2,7 @@
 
 getShorty is a php based url shortener built for my own personal use. It is built using '[flight](http://flightphp.com/)' and mongoDB.  The shortener supports multiple domains with customization allowed at the domain level.  
 
-Demo shortener can be found at: http://dblpl.us/ or http://f35.me or http://50t.in
+Demo shortener can be found at: http://dblpl.us/
 
 ### API Access
 
